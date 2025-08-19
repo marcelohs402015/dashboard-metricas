@@ -197,6 +197,8 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
       return;
     }
 
+    console.log('Iniciando processamento do arquivo:', fileConfig.name);
+
     // Cria um novo AbortController para este processamento
     abortControllerRef.current = new AbortController();
     const { signal } = abortControllerRef.current;
@@ -211,6 +213,8 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
         ? { ...f, isProcessing: true }
         : f
     ));
+
+    console.log('Status de processamento atualizado. isProcessing:', true);
 
     try {
       // Simula delay de processamento com verificação de cancelamento
@@ -278,9 +282,23 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
   };
 
   const cancelProcessing = () => {
+    console.log('Função cancelProcessing chamada');
+    console.log('abortControllerRef.current:', abortControllerRef.current);
+    
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       console.log('Solicitação de cancelamento enviada...');
+      
+      // Limpa os estados imediatamente
+      setIsProcessing(false);
+      setProcessingFileId(null);
+      
+      // Atualiza o status dos arquivos
+      setFiles(prev => prev.map(f => ({ ...f, isProcessing: false })));
+      
+      console.log('Estados limpos após cancelamento');
+    } else {
+      console.log('Nenhum AbortController encontrado para cancelar');
     }
   };
 
@@ -336,12 +354,25 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
       <div className="files-list">
         <h3>Arquivos Cadastrados</h3>
         
-        {/* Botão de cancelamento global */}
-        {isProcessing && (
+        {/* Debug: Status de processamento */}
+        <div style={{ 
+          background: '#f0f0f0', 
+          padding: '10px', 
+          marginBottom: '10px', 
+          borderRadius: '5px',
+          fontSize: '12px',
+          fontFamily: 'monospace'
+        }}>
+          Debug: isProcessing = {isProcessing.toString()}, 
+          ProcessingFiles = {files.filter(f => f.isProcessing).length}
+        </div>
+        
+        {/* Botão de cancelamento global - sempre visível quando processando */}
+        {(isProcessing || files.some(f => f.isProcessing)) && (
           <div className="cancel-processing-container">
             <div className="cancel-processing-info">
               <div className="spinner"></div>
-              <span>Processando arquivo...</span>
+              <span>Processando arquivo... (Clique em "Interromper" para cancelar)</span>
             </div>
             <button 
               className="btn-cancel"
@@ -382,10 +413,10 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
                       <button 
                         className="btn-cancel-file"
                         onClick={cancelProcessing}
-                        title="Cancelar processamento"
+                        title="Cancelar processamento deste arquivo"
                       >
                         <Icon name="stop" />
-                        Interromper
+                        Interromper Processamento
                       </button>
                     </div>
                   ) : file.isProcessed ? (
@@ -485,35 +516,6 @@ const Dashboard: React.FC<{
 
   return (
     <div className="dashboard">
-      {/* Header com linguagem em destaque */}
-      <div className="language-highlight">
-        <div className="language-info">
-          <div className="language-badge">
-            <span>Language: C#</span>
-          </div>
-          <div className="file-info">
-            <span>Arquivo: {data.metadata.sourceFile}</span>
-          </div>
-        </div>
-        {Object.keys(processedFiles).length > 1 && (
-          <div className="file-selector">
-            <label htmlFor="file-select">Selecionar Arquivo:</label>
-            <select 
-              id="file-select"
-              value={selectedFile}
-              onChange={(e) => onFileSelect(e.target.value)}
-              className="file-select"
-            >
-              {Object.keys(processedFiles).map(fileName => (
-                <option key={fileName} value={fileName}>
-                  {fileName}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-      </div>
-
       {/* Cards de Métricas Principais */}
       <div className="metrics-cards">
         <div className="metric-card">
@@ -613,7 +615,34 @@ const Dashboard: React.FC<{
         </div>
       </div>
       
-
+      {/* Header com linguagem em destaque - movido para baixo dos cards */}
+      <div className="language-highlight">
+        <div className="language-info">
+          <div className="language-badge">
+            <span>Language: C#</span>
+          </div>
+          <div className="file-info">
+            <span>Arquivo: {data.metadata.sourceFile}</span>
+          </div>
+        </div>
+        {Object.keys(processedFiles).length > 1 && (
+          <div className="file-selector">
+            <label htmlFor="file-select">Selecionar Arquivo:</label>
+            <select 
+              id="file-select"
+              value={selectedFile}
+              onChange={(e) => onFileSelect(e.target.value)}
+              className="file-select"
+            >
+              {Object.keys(processedFiles).map(fileName => (
+                <option key={fileName} value={fileName}>
+                  {fileName}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+      </div>
       
       {/* Tabela de Arquivos */}
       <div className="files-section">
