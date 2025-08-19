@@ -136,7 +136,7 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
   });
   const [newFile, setNewFile] = useState({ name: '', path: '' });
   const [isProcessing, setIsProcessing] = useState(false);
-  const [processingFileId, setProcessingFileId] = useState<string | null>(null);
+
   const abortControllerRef = useRef<AbortController | null>(null);
 
 
@@ -470,10 +470,7 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
 // Componente Dashboard Principal
 const Dashboard: React.FC<{ 
   data: CodeMetricsData | null;
-  processedFiles: {[key: string]: CodeMetricsData};
-  selectedFile: string;
-  onFileSelect: (fileName: string) => void;
-}> = ({ data, processedFiles, selectedFile, onFileSelect }) => {
+}> = ({ data }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
@@ -481,17 +478,7 @@ const Dashboard: React.FC<{
     return new Intl.NumberFormat('pt-BR').format(num);
   };
 
-  const getStatusClass = (complexity: number): string => {
-    if (complexity > 100) return 'shipped';
-    if (complexity > 50) return 'processing';
-    return 'delivered';
-  };
 
-  const getStatusText = (complexity: number): string => {
-    if (complexity > 100) return 'High';
-    if (complexity > 50) return 'Medium';
-    return 'Low';
-  };
 
   // Cálculos de paginação
   const totalItems = data?.files.length || 0;
@@ -638,33 +625,13 @@ const Dashboard: React.FC<{
         </div>
       )}
       
-      {/* Header com linguagem em destaque - movido para baixo dos cards */}
+      {/* Header com linguagem em destaque */}
       <div className="language-highlight">
         <div className="language-info">
           <div className="language-badge">
-            <span>Language: C#</span>
-          </div>
-          <div className="file-info">
-            <span>Arquivo: {data.metadata.sourceFile}</span>
+            <span>LANGUAGE: {data.summary.byLanguage[0]?.language || 'Unknown'}</span>
           </div>
         </div>
-        {Object.keys(processedFiles).length > 1 && (
-          <div className="file-selector">
-            <label htmlFor="file-select">Selecionar Arquivo:</label>
-            <select 
-              id="file-select"
-              value={selectedFile}
-              onChange={(e) => onFileSelect(e.target.value)}
-              className="file-select"
-            >
-              {Object.keys(processedFiles).map(fileName => (
-                <option key={fileName} value={fileName}>
-                  {fileName}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
       </div>
       
       {/* Tabela de Arquivos */}
@@ -823,9 +790,6 @@ function App() {
         return (
           <Dashboard 
             data={data} 
-            processedFiles={processedFiles}
-            selectedFile={selectedFile}
-            onFileSelect={setSelectedFile}
           />
         );
 
@@ -837,9 +801,6 @@ function App() {
         return (
           <Dashboard 
             data={data} 
-            processedFiles={processedFiles}
-            selectedFile={selectedFile}
-            onFileSelect={setSelectedFile}
           />
         );
     }

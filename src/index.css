@@ -216,7 +216,7 @@ body {
 
 .language-info {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
@@ -225,49 +225,27 @@ body {
 .language-badge {
   display: flex;
   align-items: center;
-  font-size: 2.5rem;
+  font-size: 3rem;
   font-weight: 700;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 768px) {
+  .language-badge {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .language-badge {
+    font-size: 2rem;
+  }
 }
 
 
 
-.file-info {
-  font-size: 0.875rem;
-  opacity: 0.9;
-}
 
-.file-selector {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.file-selector label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.file-select {
-  padding: 0.5rem 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 0.875rem;
-  min-width: 200px;
-}
-
-.file-select:focus {
-  outline: none;
-  border-color: rgba(255, 255, 255, 0.5);
-  background-color: rgba(255, 255, 255, 0.15);
-}
-
-.file-select option {
-  background-color: #1e293b;
-  color: white;
-}
 
 /* Cards de métricas principais */
 .metrics-cards {
