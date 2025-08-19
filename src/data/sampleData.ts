@@ -1,4 +1,5 @@
 import { CodeMetricsData } from '../types';
+import { sampleDevelopmentMetrics } from './sampleDevelopmentMetrics';
 
 // Dados de exemplo baseados no arquivo Fontes_Corp_short.txt
 export const sampleCodeMetricsData: CodeMetricsData = {
@@ -306,5 +307,6 @@ export const sampleCodeMetricsData: CodeMetricsData = {
         complexity: 971
       }
     ]
-  }
+  },
+  developmentMetrics: sampleDevelopmentMetrics
 };

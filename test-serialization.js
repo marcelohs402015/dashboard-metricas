@@ -32,9 +32,175 @@ const interfaces = {
     metadata: 'object',
     summary: 'LanguageSummary[]',
     files: 'FileMetrics[]',
-    analytics: 'object'
+    analytics: 'object',
+    developmentMetrics: 'object' // Nova propriedade
+  },
+  // Novas interfaces para métricas de desenvolvimento
+  DevelopmentMetrics: {
+    dataTable: 'DataTableRow[]',
+    estimatedMetrics: 'EstimatedMetrics',
+    processingInfo: 'ProcessingInfo'
+  },
+  DataTableRow: {
+    label: 'string',
+    values: 'number[]'
+  },
+  EstimatedMetrics: {
+    costToDevelop: 'string',
+    scheduleEffort: 'string',
+    peopleRequired: 'string'
+  },
+  ProcessingInfo: {
+    processedBytes: 'number',
+    processedMegabytes: 'string'
   }
 };
+
+// Parser para métricas de desenvolvimento
+class DevelopmentMetricsParser {
+  static parseContent(content) {
+    try {
+      const lines = content.split('\n').filter(line => line.trim());
+      
+      const dataTable = this.parseDataTable(lines);
+      const estimatedMetrics = this.parseEstimatedMetrics(lines);
+      const processingInfo = this.parseProcessingInfo(lines);
+
+      if (!dataTable || !estimatedMetrics || !processingInfo) {
+        return {
+          success: false,
+          error: 'Não foi possível extrair todas as seções necessárias do arquivo'
+        };
+      }
+
+      const developmentMetrics = {
+        dataTable,
+        estimatedMetrics,
+        processingInfo
+      };
+
+      return {
+        success: true,
+        data: developmentMetrics
+      };
+
+    } catch (error) {
+      return {
+        success: false,
+        error: `Erro ao processar métricas de desenvolvimento: ${error.message}`
+      };
+    }
+  }
+
+  static parseDataTable(lines) {
+    const dataTable = [];
+    let inDataTableSection = false;
+
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      
+      // Identifica o início da seção de dados
+      if (trimmedLine.includes('Plain Text') || trimmedLine.includes('batch.txt')) {
+        inDataTableSection = true;
+      }
+
+      if (inDataTableSection) {
+        const row = this.parseDataTableRow(trimmedLine);
+        if (row) {
+          dataTable.push(row);
+        }
+
+        // Para quando encontrar a linha "Total"
+        if (trimmedLine.startsWith('Total')) {
+          break;
+        }
+      }
+    }
+
+    return dataTable.length > 0 ? dataTable : null;
+  }
+
+  static parseDataTableRow(line) {
+    const parts = line.trim().split(/\s+/);
+    
+    if (parts.length < 2) return null;
+
+    const label = parts[0];
+    const values = parts.slice(1).map(val => {
+      const num = parseFloat(val);
+      return isNaN(num) ? 0 : num;
+    });
+
+    return {
+      label,
+      values
+    };
+  }
+
+  static parseEstimatedMetrics(lines) {
+    const metrics = {};
+
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      
+      if (trimmedLine.includes('Estimated Cost to Develop')) {
+        const match = trimmedLine.match(/\$([\d,]+)/);
+        if (match) {
+          metrics.costToDevelop = `$${match[1]}`;
+        }
+      }
+      
+      if (trimmedLine.includes('Estimated Schedule Effort')) {
+        const match = trimmedLine.match(/([\d.]+)\s+months/);
+        if (match) {
+          metrics.scheduleEffort = `${match[1]} months`;
+        }
+      }
+      
+      if (trimmedLine.includes('Estimated People Required')) {
+        const match = trimmedLine.match(/([\d.]+)/);
+        if (match) {
+          metrics.peopleRequired = match[1];
+        }
+      }
+    }
+
+    if (metrics.costToDevelop && metrics.scheduleEffort && metrics.peopleRequired) {
+      return metrics;
+    }
+
+    return null;
+  }
+
+  static parseProcessingInfo(lines) {
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      
+      if (trimmedLine.includes('Processed:')) {
+        const bytesMatch = trimmedLine.match(/(\d+)\s+bytes/);
+        const mbMatch = trimmedLine.match(/([\d.]+)\s+megabytes/);
+        
+        if (bytesMatch && mbMatch) {
+          return {
+            processedBytes: parseInt(bytesMatch[1]),
+            processedMegabytes: `${mbMatch[1]} megabytes (SI)`
+          };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  static isValidDevelopmentMetricsContent(content) {
+    const lines = content.split('\n');
+    const hasDataTable = lines.some(line => line.includes('Plain Text') || line.includes('batch.txt'));
+    const hasEstimatedMetrics = lines.some(line => line.includes('Estimated Cost to Develop'));
+    const hasProcessingInfo = lines.some(line => line.includes('Processed:'));
+
+    return hasDataTable && hasEstimatedMetrics && hasProcessingInfo;
+  }
+}
 
 // Simula o CodeMetricsTransformer
 class CodeMetricsTransformer {
@@ -81,6 +247,14 @@ class CodeMetricsTransformer {
 
       // Estrutura os dados finais
       const structuredData = this.structureData(result);
+      
+      // Verifica se o conteúdo contém métricas de desenvolvimento
+      if (DevelopmentMetricsParser.isValidDevelopmentMetricsContent(content)) {
+        const devMetricsResult = DevelopmentMetricsParser.parseContent(content);
+        if (devMetricsResult.success) {
+          structuredData.developmentMetrics = devMetricsResult.data;
+        }
+      }
       
       return {
         success: true,
@@ -172,6 +346,7 @@ class CodeMetricsTransformer {
       summary: parsedData.summary,
       files: parsedData.files,
       analytics: analytics
+      // developmentMetrics será adicionado posteriormente se encontrado
     };
   }
 

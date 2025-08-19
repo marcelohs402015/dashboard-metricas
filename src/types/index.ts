@@ -75,6 +75,7 @@ export interface CodeMetricsData {
     topLanguages: LanguageSummary[];
     topFiles: FileMetrics[];
   };
+  developmentMetrics?: DevelopmentMetrics; // Nova propriedade opcional
 }
 
 export interface CodeMetricsFile {
@@ -89,4 +90,27 @@ export interface CodeMetricsProcessingResult {
   success: boolean;
   data?: CodeMetricsData;
   error?: string;
+}
+
+// Novos tipos para métricas de desenvolvimento
+export interface DevelopmentMetrics {
+  dataTable: DataTableRow[];
+  estimatedMetrics: EstimatedMetrics;
+  processingInfo: ProcessingInfo;
+}
+
+export interface DataTableRow {
+  label: string;
+  values: number[];
+}
+
+export interface EstimatedMetrics {
+  costToDevelop: string;
+  scheduleEffort: string;
+  peopleRequired: string;
+}
+
+export interface ProcessingInfo {
+  processedBytes: number;
+  processedMegabytes: string;
 }

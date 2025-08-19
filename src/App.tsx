@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import { CodeMetricsData } from './types';
 import { sampleCodeMetricsData } from './data/sampleData';
+import { DevelopmentMetricsCard } from './components/DevelopmentMetricsCard';
+import DevelopmentMetricsPage from './components/DevelopmentMetricsPage';
 
 // Componente de ícones SVG
 const Icon: React.FC<{ name: string; className?: string }> = ({ name, className = '' }) => {
@@ -66,6 +68,15 @@ const Sidebar: React.FC<{ activeItem: string; onItemClick: (item: string) => voi
           </div>
           Dashboard
       </div>
+        <div 
+          className={`nav-item ${activeItem === 'development-metrics' ? 'active' : ''}`}
+          onClick={() => onItemClick('development-metrics')}
+        >
+          <div className="nav-icon">
+            <Icon name="chart" />
+          </div>
+          Métricas de Desenvolvimento
+        </div>
         <div 
           className={`nav-item ${activeItem === 'files' ? 'active' : ''}`}
           onClick={() => onItemClick('files')}
@@ -620,6 +631,13 @@ const Dashboard: React.FC<{
         </div>
       </div>
       
+      {/* Métricas de Desenvolvimento */}
+      {data.developmentMetrics && (
+        <div className="development-metrics-section">
+          <DevelopmentMetricsCard metrics={data.developmentMetrics} />
+        </div>
+      )}
+      
       {/* Header com linguagem em destaque - movido para baixo dos cards */}
       <div className="language-highlight">
         <div className="language-info">
@@ -810,8 +828,11 @@ function App() {
             onFileSelect={setSelectedFile}
           />
         );
-      case 'files':
-        return <FileRegistration onFileProcessed={handleFileProcessed} />;
+
+              case 'development-metrics':
+          return <DevelopmentMetricsPage />;
+        case 'files':
+          return <FileRegistration onFileProcessed={handleFileProcessed} />;
       default:
         return (
           <Dashboard 

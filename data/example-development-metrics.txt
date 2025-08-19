@@ -1,0 +1,11 @@
+Plain Text    1    0    0    0    0    0
+batch.txt    0    0    0    0    0
+Total    40    7175    463    837    5875    5
+
+Estimated Development Metrics:
+Estimated Cost to Develop (organic): $173,401
+Estimated Schedule Effort (organic): 7.07 months
+Estimated People Required (organic): 2.18
+
+Processing Information:
+Processed: 409509 bytes, 0.410 megabytes (SI)

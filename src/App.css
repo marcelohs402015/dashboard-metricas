@@ -1300,3 +1300,415 @@
     padding: 2rem 1rem;
   }
 }
+
+/* Estilos para o componente DevelopmentMetricsCard */
+.development-metrics-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.development-metrics-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.development-metrics-card .card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1.5rem;
+  color: white;
+}
+
+.development-metrics-card .card-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.development-metrics-card .card-content {
+  padding: 1.5rem;
+}
+
+.development-metrics-card .metrics-section {
+  margin-bottom: 2rem;
+}
+
+.development-metrics-card .metrics-section:last-child {
+  margin-bottom: 0;
+}
+
+.development-metrics-card .section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* Estilos para a tabela de dados */
+.data-table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-secondary);
+}
+
+.data-table .table-header {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.75rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.data-table .table-cell {
+  padding: 0.75rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.875rem;
+}
+
+.data-table .label-cell {
+  font-weight: 600;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.data-table .total-row {
+  background: var(--accent-color);
+  font-weight: 600;
+}
+
+.data-table .total-row .table-cell {
+  color: white;
+}
+
+/* Estilos para métricas estimadas */
+.estimated-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.metric-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.metric-item:hover {
+  background: var(--bg-tertiary);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.metric-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 8px;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.metric-content {
+  flex: 1;
+}
+
+.metric-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.metric-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.metric-value.cost-value {
+  color: #10b981;
+}
+
+.metric-value.schedule-value {
+  color: #f59e0b;
+}
+
+.metric-value.people-value {
+  color: #3b82f6;
+}
+
+/* Estilos para informações de processamento */
+.processing-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--bg-secondary);
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.info-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Seção de métricas de desenvolvimento */
+.development-metrics-section {
+  margin: 2rem 0;
+  padding: 0 1rem;
+}
+
+/* Página de métricas de desenvolvimento */
+.development-metrics-page {
+  width: 100%;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+}
+
+/* Card de resumo de métricas responsivo */
+.metrics-summary-card {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid var(--border-color);
+}
+
+.metrics-summary-card.full-screen {
+  margin: 0;
+  border-radius: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.metrics-summary-card .metrics-section {
+  margin-bottom: 2rem;
+}
+
+.metrics-summary-card .metrics-section:last-child {
+  margin-bottom: 0;
+}
+
+.metrics-summary-card .section-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.metrics-summary-card .metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.metrics-summary-card .metric-item {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.metrics-summary-card .metric-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.metrics-summary-card .metric-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #e2e8f0;
+  border-radius: 8px;
+  margin-right: 1rem;
+  color: #64748b;
+}
+
+.metrics-summary-card .metric-content {
+  flex: 1;
+}
+
+.metrics-summary-card .metric-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.metrics-summary-card .metric-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.metrics-summary-card .cost-value {
+  color: #059669;
+}
+
+.metrics-summary-card .schedule-value {
+  color: #d97706;
+}
+
+.metrics-summary-card .people-value {
+  color: #2563eb;
+}
+
+.metrics-summary-card .processing-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.metrics-summary-card .info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.metrics-summary-card .info-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.metrics-summary-card .info-value {
+  font-size: 0.875rem;
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .metrics-summary-card {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .metrics-summary-card .metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  .metrics-summary-card .section-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .development-metrics-page {
+    padding: 0;
+  }
+  
+  .metrics-summary-card {
+    margin: 0;
+    padding: 1rem;
+    border-radius: 0;
+  }
+  
+  .metrics-summary-card .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .metrics-summary-card .metric-item {
+    padding: 1rem;
+  }
+  
+  .metrics-summary-card .metric-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 0.75rem;
+  }
+  
+  .metrics-summary-card .metric-value {
+    font-size: 1.25rem;
+  }
+  
+  .metrics-summary-card .processing-info {
+    grid-template-columns: 1fr;
+  }
+  
+  .metrics-summary-card .section-title {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .metrics-summary-card {
+    padding: 0.75rem;
+  }
+  
+  .metrics-summary-card .metric-item {
+    padding: 0.75rem;
+  }
+  
+  .metrics-summary-card .metric-value {
+    font-size: 1.125rem;
+  }
+  
+  .metrics-summary-card .section-title {
+    font-size: 1rem;
+  }
+  
+  .metrics-summary-card .info-item {
+    padding: 0.75rem 1rem;
+  }
+}
