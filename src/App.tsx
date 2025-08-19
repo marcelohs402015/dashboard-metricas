@@ -28,7 +28,7 @@ const Header: React.FC = () => {
     <header className="header">
       <div className="header-left">
         <div className="logo">
-          <div className="logo-text">foursys</div>
+          <div className="logo-text">mstech</div>
           <div className="logo-symbol">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
               <path d="M8 16L12 12L16 16L12 20L8 16Z" fill="#FF6B35"/>

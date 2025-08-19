@@ -327,4 +327,4 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ---
 
-**Desenvolvido com ❤️ por Marcelo Hernandes - Equipe Foursys**
+**Desenvolvido com ❤️ por Marcelo Hernandes - Equipe MSTech**
