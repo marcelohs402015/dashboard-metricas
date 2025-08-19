@@ -1,0 +1,31 @@
+Language                 Files     Lines   Blanks  Comments     Code Complexity
+C#                       30      5000     1500      800      2700      1500
+~/com/caixa/backend/zl3001s.cs     17532     6976      4128     6428        646
+~com/caixa/backend/szemb412.cs     15958     4876      4957     6125        725
+~com/caixa/backend/szemb302.cs     15367     4884      4361     6122        636
+~com/caixa/backend/zecpm030.cs     14502     3983      4559     5960        971
+~com/caixa/backend/zecpt030.cs     14499     3983      4555     5961        971
+~com/caixa/backend/zecpb030.cs     14493     3988      4584     5921        959
+~com/caixa/backend/zecps030.cs     13977     3632      4157     6188        654
+~/com/caixa/backend/zl3610b.cs     13005     4017      4229     4759        373
+~com/caixa/backend/szcpb113.cs     12181     3187      3439     5555        449
+~com/caixa/backend/szcpt113.cs     12176     3186      3439     5551        450
+~com/caixa/backend/zecps000.cs     11083     3901      3080     4102        872
+~com/caixa/backend/szemb404.cs     10877     3534      2976     4367        419
+~com/caixa/backend/szemb410.cs     10546     3347      2914     4285        428
+~com/caixa/backend/szemb403.cs     10103     3244      2726     4133        386
+~com/caixa/backend/szcpb200.cs      9886     2617      3457     3812        430
+~com/caixa/backend/szemb409.cs      9826     3054      2636     4136        422
+~/com/caixa/backend/zl3810b.cs      9773     2930      3328     3515        277
+~com/caixa/backend/szemb407.cs      9698     3110      2603     3985        357
+~com/caixa/backend/rsfis033.cs      9687     2991      3021     3675        470
+~com/caixa/backend/zecpb011.cs      9555     2823      3225     3507        971
+~com/caixa/backend/szcpb011.cs      9516     2552      2565     4399        216
+~com/caixa/backend/szemb415.cs      9468     3105      2444     3919        419
+~com/caixa/backend/szemb417.cs      9464     3176      2416     3872        398
+~com/caixa/backend/szemb405.cs      9449     3036      2513     3900        372
+~com/caixa/backend/szsip095.cs      9443     3395      2628     3420        850
+~com/caixa/backend/szemb406.cs      9109     2916      2476     3717        363
+~com/caixa/backend/szemb419.cs      8661     2763      2197     3701        395
+~com/caixa/backend/szemb418.cs      8654     2756      2197     3701        395
+~com/caixa/backend/szcpb114.cs      8488     2439      1992     4057        165
