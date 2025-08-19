@@ -197,7 +197,6 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
 
     // Simula o processamento do arquivo
     setIsProcessing(true);
-    setProcessingFileId(fileConfig.id);
     
     // Atualiza o status do arquivo
     setFiles(prev => prev.map(f => 
@@ -268,7 +267,6 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
       ));
     } finally {
       setIsProcessing(false);
-      setProcessingFileId(null);
       abortControllerRef.current = null;
     }
   };
@@ -281,7 +279,6 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
     
     // Limpa os estados imediatamente
     setIsProcessing(false);
-    setProcessingFileId(null);
     
     // Atualiza o status dos arquivos
     setFiles(prev => prev.map(f => ({ ...f, isProcessing: false })));
