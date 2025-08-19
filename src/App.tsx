@@ -97,16 +97,22 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
     // Carrega arquivos salvos do localStorage
     const savedFiles = localStorage.getItem('registeredFiles');
     if (savedFiles) {
-      return JSON.parse(savedFiles);
+      const parsedFiles = JSON.parse(savedFiles);
+      // Garante que nenhum arquivo esteja em processamento ao carregar
+      return parsedFiles.map((file: FileConfig) => ({
+        ...file,
+        isProcessing: false
+      }));
     }
-    // Arquivos padrão se não houver salvos
+    // Arquivos padrão para demonstração se não houver salvos
     return [
       {
         id: '1',
         name: 'Fontes_Corp_short.txt',
         path: 'data/Fontes_Corp_short.txt',
         isProcessing: false,
-        isProcessed: false
+        isProcessed: true,
+        processedAt: new Date().toISOString()
       },
       {
         id: '2',
@@ -122,32 +128,7 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
   const [processingFileId, setProcessingFileId] = useState<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  // Verifica se precisa adicionar arquivos padrão
-  useEffect(() => {
-    const defaultFiles = [
-      {
-        id: '1',
-        name: 'Fontes_Corp_short.txt',
-        path: 'data/Fontes_Corp_short.txt',
-        isProcessing: false,
-        isProcessed: false
-      },
-      {
-        id: '2',
-        name: 'Fontes_Corp.txt',
-        path: 'data/Fontes_Corp.txt',
-        isProcessing: false,
-        isProcessed: false
-      }
-    ];
 
-    const currentFileNames = files.map(f => f.name);
-    const missingFiles = defaultFiles.filter(df => !currentFileNames.includes(df.name));
-    
-    if (missingFiles.length > 0) {
-      setFiles(prev => [...prev, ...missingFiles]);
-    }
-  }, []);
 
   // Salva arquivos no localStorage sempre que a lista mudar
   useEffect(() => {
@@ -284,33 +265,65 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
   const cancelProcessing = () => {
     console.log('Função cancelProcessing chamada');
     console.log('abortControllerRef.current:', abortControllerRef.current);
+    console.log('isProcessing:', isProcessing);
+    console.log('files processing:', files.filter(f => f.isProcessing).length);
     
+    // Limpa os estados imediatamente
+    setIsProcessing(false);
+    setProcessingFileId(null);
+    
+    // Atualiza o status dos arquivos
+    setFiles(prev => prev.map(f => ({ ...f, isProcessing: false })));
+    
+    // Cancela o processamento se houver um AbortController ativo
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       console.log('Solicitação de cancelamento enviada...');
-      
-      // Limpa os estados imediatamente
-      setIsProcessing(false);
-      setProcessingFileId(null);
-      
-      // Atualiza o status dos arquivos
-      setFiles(prev => prev.map(f => ({ ...f, isProcessing: false })));
-      
-      console.log('Estados limpos após cancelamento');
-    } else {
-      console.log('Nenhum AbortController encontrado para cancelar');
     }
+    
+    // Limpa a referência do AbortController
+    abortControllerRef.current = null;
+    
+    console.log('Estados limpos após cancelamento');
   };
 
   const removeFile = (id: string) => {
     setFiles(prev => prev.filter(f => f.id !== id));
   };
 
+  const resetToDefault = () => {
+    // Limpa o localStorage
+    localStorage.removeItem('registeredFiles');
+    localStorage.removeItem('processedFilesData');
+    
+    // Recarrega a página para resetar para o estado padrão
+    window.location.reload();
+  };
+
   return (
     <div className="file-registration">
       <div className="registration-header">
-        <h1>Processar Dados</h1>
-        <p>Adicione arquivos de métricas de código para processar e visualizar no dashboard</p>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div>
+            <h1>Processar Dados</h1>
+            <p>Adicione arquivos de métricas de código para processar e visualizar no dashboard</p>
+          </div>
+          <button 
+            onClick={resetToDefault}
+            style={{
+              padding: '8px 16px',
+              backgroundColor: '#6b7280',
+              color: 'white',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '14px'
+            }}
+            title="Resetar para estado inicial"
+          >
+            Reset Demo
+          </button>
+        </div>
       </div>
 
       {/* Formulário de cadastro */}
@@ -354,6 +367,8 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
       <div className="files-list">
         <h3>Arquivos Cadastrados</h3>
         
+
+        
         {/* Debug: Status de processamento */}
         <div style={{ 
           background: '#f0f0f0', 
@@ -368,7 +383,7 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
         </div>
         
         {/* Botão de cancelamento global - sempre visível quando processando */}
-        {(isProcessing || files.some(f => f.isProcessing)) && (
+        {isProcessing && (
           <div className="cancel-processing-container">
             <div className="cancel-processing-info">
               <div className="spinner"></div>
@@ -405,19 +420,9 @@ const FileRegistration: React.FC<{ onFileProcessed: (data: CodeMetricsData, file
                 </div>
                 <div className="file-actions">
                   {file.isProcessing ? (
-                    <div className="processing-actions">
-                      <div className="processing-status">
-                        <div className="spinner"></div>
-                        <span>Processando...</span>
-                      </div>
-                      <button 
-                        className="btn-cancel-file"
-                        onClick={cancelProcessing}
-                        title="Cancelar processamento deste arquivo"
-                      >
-                        <Icon name="stop" />
-                        Interromper Processamento
-                      </button>
+                    <div className="processing-status">
+                      <div className="spinner"></div>
+                      <span>Processando...</span>
                     </div>
                   ) : file.isProcessed ? (
                     <div className="processed-badge">
@@ -757,9 +762,16 @@ function App() {
     if (savedData) {
       return JSON.parse(savedData);
     }
-    // Dados padrão se não houver salvos
+    // Dados padrão para demonstração - apenas Fontes_Corp_short.txt processado
     return {
-      'Fontes_Corp_short.txt': sampleCodeMetricsData
+      'Fontes_Corp_short.txt': {
+        ...sampleCodeMetricsData,
+        metadata: {
+          ...sampleCodeMetricsData.metadata,
+          sourceFile: 'Fontes_Corp_short.txt',
+          generatedAt: new Date().toISOString()
+        }
+      }
     };
   });
   const [selectedFile, setSelectedFile] = useState<string>('Fontes_Corp_short.txt');
