@@ -1,4 +1,4 @@
-# 📊 Dashboard de Métricas de Código Corporativo - FOURSYS
+# 📊 Dashboard de Métricas de Código Corporativo
 
 Um dashboard moderno e responsivo desenvolvido em React com TypeScript para análise e visualização de estatísticas de código fonte corporativo. A aplicação oferece uma interface intuitiva para processamento de arquivos de métricas e análise detalhada de código.
 
@@ -327,7 +327,7 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 
 ---
 
-**Desenvolvido com ❤️ por Marcelo Hernandes - Equipe Foursys**
+**Desenvolvido com ❤️ por Marcelo Hernandes**
 
 # Introduction 
 TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
